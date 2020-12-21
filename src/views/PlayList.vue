@@ -61,16 +61,17 @@ export default {
   },
   methods: {
     init() {
-      console.log(this.playId);
+      // console.log(this.playId);
       this.axios({
         method: "get",
-        url: "http://music.kele8.cn/playlist/detail",
+        // url: "http://music.kele8.cn/playlist/detail",
+        url: "/playlist/detail",
         params: {
           id: this.playId,
         },
       })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.playInfo = res.data.playlist;
           this.playCreator = res.data.playlist.creator;
           return res.data.playlist.trackIds
@@ -87,8 +88,8 @@ export default {
             },
           }).then((res) => {
             this.playlist = res.data.songs;
-            console.log(res);
-            console.log(this.playlist);
+            // console.log(res);
+            // console.log(this.playlist);
           });
         });
     },

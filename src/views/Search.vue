@@ -79,7 +79,7 @@ export default {
         method: "post",
         url: "/search/hot",
       }).then((res) => {
-        console.log(res.data.result.hots);
+        // console.log(res.data.result.hots);
         this.hots = res.data.result.hots;
       });
     },

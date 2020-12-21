@@ -17,12 +17,8 @@
       <div v-show="isShowPlayBar" class="play" @click="onclickPlayBar">
         <div class="left">
           <div class="img_b">
-            <img
-              :src="
-                currentMusic.picUrl || currentMusic.al.picUrl || currentMusic
-              "
-              alt=""
-            />
+<!--            <img :src="currentMusic.picUrl || currentMusic.al.picUrl" alt="" />-->
+            <img :src="playImgUrl" alt="" />
           </div>
           <div class="text">
             <p class="title">{{ currentMusic.name }}</p>
@@ -58,7 +54,7 @@
       <div v-if="!isShowPlayBar" class="Play_window">
         <div
           class="mask"
-          :style="{ backgroundImage: `url('${currentMusic.picUrl}')` }"
+          :style="{ backgroundImage: `url('${playImgUrl}')` }"
         ></div>
         <play-header
           :songInformation="currentMusic"
@@ -114,6 +110,11 @@ export default {
     };
   },
   computed: {
+    playImgUrl() {
+      let url = this.currentMusic.picUrl || this.currentMusic.al.picUrl;
+      console.log(url)
+      return url;
+    },
     playInfo() {
       let info = this.currentMusic.ar || this.currentMusic.song.artists;
       return info;
@@ -243,7 +244,7 @@ export default {
     // },
 
     getLyric() {
-      console.log(this.currentMusic.name, this.currentMusic.id);
+      // console.log(this.currentMusic.name, this.currentMusic.id);
       this.axios({
         url: "/lyric",
         method: "get",
@@ -269,7 +270,7 @@ export default {
           });
         // console.log(l_arr)
         this.lyric = l_arr;
-        console.log(this.lyric);
+        // console.log(this.lyric);
       });
     },
     lyrics_scroll(v) {
