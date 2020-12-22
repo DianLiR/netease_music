@@ -5,16 +5,16 @@
 
       <div class="progress_bar">
         <input
-          type="range"
-          min="0"
-          step="1"
           :max="duration"
           :value="currentTime"
+          min="0"
+          step="1"
+          type="range"
           @input="get_value"
         />
         <span
-          class="move_point"
           :style="{ width: (currentTime / duration) * 100 + '%' }"
+          class="move_point"
         ></span>
       </div>
       <span class="duration">{{ duration | FormatTime }}</span>
@@ -23,16 +23,16 @@
       <span class="iconfont icon-hanhan-01-011"></span>
       <span
         class="iconfont icon-shangyishou_huaban"
-        @click="$emit('toggleSong','true')"
+        @click="$emit('toggleSong', 'true')"
       ></span>
       <span
-        class="iconfont fs"
         :class="paused ? 'icon-bofang_huaban1' : 'icon-zanting_huaban1'"
+        class="iconfont fs"
         @click="togglePlay"
       ></span>
       <span
         class="iconfont icon-xiayishou_huaban"
-        @click="$emit('toggleSong','false')"
+        @click="$emit('toggleSong', 'false')"
       ></span>
       <span class="iconfont icon-wenzhang_huaban"></span>
     </div>
@@ -107,10 +107,11 @@ export default {
     width: 80%;
     height: 20px;
     align-items: center;
-&>span{
-  font-size: 12px;
-  color: white;
-}
+
+    & > span {
+      font-size: 12px;
+      color: white;
+    }
 
     .progress_bar {
       width: 70%;
@@ -154,11 +155,13 @@ export default {
       }
     }
   }
+
   .play_control {
     display: flex;
     width: 80%;
     margin: 0 auto;
     justify-content: space-between;
+
     > span {
       line-height: 50px;
       color: white;
@@ -166,6 +169,7 @@ export default {
       font-size: 24px;
       width: 100px;
       height: 50px;
+
       &.fs {
         font-size: 42px;
       }

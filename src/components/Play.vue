@@ -17,7 +17,7 @@
       <div v-show="isShowPlayBar" class="play" @click="onclickPlayBar">
         <div class="left">
           <div class="img_b">
-<!--            <img :src="currentMusic.picUrl || currentMusic.al.picUrl" alt="" />-->
+            <!--            <img :src="currentMusic.picUrl || currentMusic.al.picUrl" alt="" />-->
             <img :src="playImgUrl" alt="" />
           </div>
           <div class="text">
@@ -40,7 +40,7 @@
             ></span>
           </div>
           <div class="next_btn" @click.stop="toggleSong(true)">
-            <span class="iconfont icon-bofang_huaban1"></span>
+            <span class="iconfont icon-xiayishou_huaban1"></span>
           </div>
         </div>
       </div>
@@ -53,8 +53,8 @@
     >
       <div v-if="!isShowPlayBar" class="Play_window">
         <div
-          class="mask"
           :style="{ backgroundImage: `url('${playImgUrl}')` }"
+          class="mask"
         ></div>
         <play-header
           :songInformation="currentMusic"
@@ -72,16 +72,24 @@
             v-show="isShowLyric"
             :lyric="lyric"
             :rollingDistance="rollingDistance"
+            @update:currentTime="$refs.audio.currentTime = $event"
             @click.native="isShowLyric = !isShowLyric"
           ></play-lyric>
+          <!--          <play-lyric
+                      v-show="isShowLyric"
+                      :lyric="lyric"
+                      :currentTime="currentTime"
+                      @update:currentTime="$refs.audio.currentTime = $event"
+                      @click.native="isShowLyric = !isShowLyric"
+                    ></play-lyric>-->
         </div>
         <play-footer
           :currentTime="currentTime"
           :duration="duration"
           :paused="paused"
-          @update:currentTime="$refs.audio.currentTime = $event"
-          @toggle_play="togglePaused"
           @toggleSong="toggleSong"
+          @toggle_play="togglePaused"
+          @update:currentTime="$refs.audio.currentTime = $event"
         ></play-footer>
       </div>
     </transition>
@@ -111,13 +119,13 @@ export default {
   },
   computed: {
     playImgUrl() {
-      let url = this.currentMusic.picUrl || this.currentMusic.al.picUrl;
-      console.log(url)
-      return url;
+      // let url = this.currentMusic.picUrl || this.currentMusic.al.picUrl;
+      // console.log(url);
+      return this.currentMusic.picUrl || this.currentMusic.al.picUrl;
     },
     playInfo() {
-      let info = this.currentMusic.ar || this.currentMusic.song.artists;
-      return info;
+      // let info = this.currentMusic.ar || this.currentMusic.song.artists;
+      return this.currentMusic.ar || this.currentMusic.song.artists;
     },
   },
 
@@ -144,6 +152,7 @@ export default {
       this.paused = false;
     });
     audio.addEventListener("durationchange", () => {
+      this.lyric = "";
       this.getLyric();
       this.duration = audio.duration;
     });
@@ -256,7 +265,7 @@ export default {
         // console.log(res);
         let lyric = res.data.lrc.lyric;
         let regular_verification = /\[\d{2}:\d{2}\.\d{2,3}\]/gi;
-        let l_arr = lyric
+        this.lyric = lyric
           .split("\n")
           .filter((e) => e)
           .map((item, index) => {
@@ -269,16 +278,16 @@ export default {
             return { time, text, index };
           });
         // console.log(l_arr)
-        this.lyric = l_arr;
+        // this.lyric = l_arr;
         // console.log(this.lyric);
       });
     },
     lyrics_scroll(v) {
       if (this.lyric) {
-        let i = this.lyric.findIndex((item) => {
+        this.rollingDistance = this.lyric.findIndex((item) => {
           return item.time > v;
         });
-        this.rollingDistance = i;
+        // this.rollingDistance = i;
       }
     },
   },
@@ -310,6 +319,7 @@ export default {
     .left {
       flex: 5;
       display: flex;
+
       .img_b {
         width: 50px;
         height: 50px;
@@ -327,6 +337,7 @@ export default {
         text-align: left;
         justify-content: space-around;
         flex-flow: wrap column;
+
         .title {
           max-width: 200px;
           overflow: hidden;
@@ -334,6 +345,7 @@ export default {
           text-overflow: ellipsis;
           white-space: nowrap;
         }
+
         .singer {
           color: #888;
           font-size: 12px;
@@ -386,6 +398,7 @@ export default {
     top: 0;
     left: 0;
     z-index: 9;
+
     .mask {
       position: absolute;
       left: 0;
@@ -397,6 +410,7 @@ export default {
       height: 100%;
       z-index: -2;
       filter: blur(1px) brightness(0.5);
+
       &:after {
         content: "";
         position: absolute;
@@ -410,6 +424,7 @@ export default {
       }
     }
   }
+
   .content_box {
     height: calc(100% - 70px * 2);
   }
