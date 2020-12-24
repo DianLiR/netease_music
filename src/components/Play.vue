@@ -40,7 +40,7 @@
             ></span>
           </div>
           <div class="next_btn" @click.stop="toggleSong(true)">
-            <span class="iconfont icon-xiayishou_huaban1"></span>
+            <span class="iconfont icon-youjiantou_huaban1"></span>
           </div>
         </div>
       </div>
@@ -185,15 +185,15 @@ export default {
       let context = canvas.getContext("2d");
       context.clearRect(0, 0, 50, 50);
       context.beginPath();
-      context.strokeStyle = "black";
-      context.lineWidth = 1; //设置线条宽度
+      context.strokeStyle = "#636363";
+      context.lineWidth = 2.5; //设置线条宽度
       context.arc(25, 25, 20, 0, Math.PI * 2, false);
       context.stroke();
       context.closePath();
 
       context.beginPath();
       context.strokeStyle = "skyblue";
-      context.lineWidth = 2;
+      context.lineWidth = 2.5;
       context.arc(
         25,
         25,
@@ -384,8 +384,8 @@ export default {
         text-align: center;
 
         > .iconfont {
-          font-size: 2.5em;
-          color: #888;
+          font-size: 2em;
+          //color: #888;
         }
       }
     }
