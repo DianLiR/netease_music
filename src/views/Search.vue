@@ -75,15 +75,18 @@ export default {
   },
   methods: {
     info() {
+      this.$loading()
       this.axios({
         method: "post",
         url: "/search/hot",
       }).then((res) => {
         // console.log(res.data.result.hots);
+        this.$loading.close()
         this.hots = res.data.result.hots;
       });
     },
     search() {
+      this.$loading()
       this.axios({
         method: "get",
         url: "http://keuaile75.top:3000/cloudsearch",
@@ -92,6 +95,7 @@ export default {
           keywords: this.SearchValue,
         },
       }).then((res) => {
+        this.$loading.close()
         this.isShowDefault=false
         this.SearchList = res.data.result.songs;
       });

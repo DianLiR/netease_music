@@ -2,6 +2,8 @@ import Vue from "vue";
 import "./plugins/axios";
 import App from "./App.vue";
 import router from "./router";
+import Loading from "./components/loading/loading";
+Vue.use(Loading);
 
 Vue.config.productionTip = false;
 Vue.filter("format_quantity", (v) => {

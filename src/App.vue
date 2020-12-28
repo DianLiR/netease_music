@@ -1,5 +1,17 @@
 <template>
   <div id="app" :class="{ bb: currentMusic && isShowBar }">
+    <HomeNav v-if="$route.name != 'PlayList'" />
+    <keep-alive>
+      <router-view
+        :currentMusic="currentMusic"
+        :paused="paused"
+        @update:PlayList="PlayList = $event"
+        @update:music="
+          currentMusic = $event.item;
+          currentIndex = $event.index;
+        "
+      />
+    </keep-alive>
     <Play
       v-if="currentMusic"
       :currentMusic="currentMusic"
@@ -8,23 +20,10 @@
       @update:paused="paused = $event"
       :PlayList="PlayList"
       @update:music="
-          currentMusic = $event.item;
-          currentIndex = $event.index;
-        "
+        currentMusic = $event.item;
+        currentIndex = $event.index;
+      "
     />
-
-    <HomeNav />
-    <keep-alive>
-      <router-view
-        :currentMusic="currentMusic"
-        :paused="paused"
-        @update:PlayList="PlayList=$event"
-        @update:music="
-          currentMusic = $event.item;
-          currentIndex = $event.index;
-        "
-      />
-    </keep-alive>
     <!-- <router-view></router-view> -->
   </div>
 </template>
@@ -38,12 +37,13 @@ export default {
     Play,
     HomeNav,
   },
+
   data: function () {
     return {
       currentMusic: null,
       paused: null,
       isShowBar: true,
-      currentIndex:0,
+      currentIndex: 0,
       PlayList: [],
     };
   },

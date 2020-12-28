@@ -18,7 +18,7 @@
         <div class="left">
           <div class="img_b">
             <!--            <img :src="currentMusic.picUrl || currentMusic.al.picUrl" alt="" />-->
-            <img :src="playImgUrl" alt="" />
+            <img :src="playImgUrl" alt=""/>
           </div>
           <div class="text">
             <p class="title">{{ currentMusic.name }}</p>
@@ -39,7 +39,7 @@
               class="icon iconfont"
             ></span>
           </div>
-          <div class="next_btn" @click.stop="toggleSong(true)">
+          <div class="next_btn" @click.stop="toggleSong(false)">
             <span class="iconfont icon-youjiantou_huaban1"></span>
           </div>
         </div>
@@ -66,14 +66,14 @@
             v-show="!isShowLyric"
             :currentMusic="currentMusic"
             :paused="paused"
-            @click.native="isShowLyric = !isShowLyric"
+            @click.native.self="isShowLyric = !isShowLyric"
           ></play-chart>
           <play-lyric
             v-show="isShowLyric"
             :lyric="lyric"
             :rollingDistance="rollingDistance"
             @update:currentTime="$refs.audio.currentTime = $event"
-            @click.native="isShowLyric = !isShowLyric"
+            @click.native.self="isShowLyric = !isShowLyric"
           ></play-lyric>
           <!--          <play-lyric
                       v-show="isShowLyric"
@@ -86,9 +86,11 @@
         <play-footer
           :currentTime="currentTime"
           :duration="duration"
+          :isRandom="isRandom"
           :paused="paused"
           @toggleSong="toggleSong"
           @toggle_play="togglePaused"
+          @update:isRandom="isRandom = !isRandom"
           @update:currentTime="$refs.audio.currentTime = $event"
         ></play-footer>
       </div>
@@ -96,15 +98,15 @@
   </div>
 </template>
 <script>
-import PlayHeader from "./PlayBox/PlayHeader.vue";
-import PlayChart from "@/components/PlayBox/PlayChart";
-import PlayLyric from "@/components/PlayBox/PlayLyric";
-import PlayFooter from "@/components/PlayBox/PlayFooter";
+import PlayHeader from './PlayBox/PlayHeader.vue'
+import PlayChart from '@/components/PlayBox/PlayChart'
+import PlayLyric from '@/components/PlayBox/PlayLyric'
+import PlayFooter from '@/components/PlayBox/PlayFooter'
 
 export default {
   components: { PlayFooter, PlayLyric, PlayChart, PlayHeader },
-  name: "Play",
-  props: ["currentMusic", "currentIndex", "PlayList"],
+  name: 'Play',
+  props: ['currentMusic', 'currentIndex', 'PlayList'],
 
   data() {
     return {
@@ -113,25 +115,26 @@ export default {
       currentTime: 0,
       isShowLyric: false,
       isShowPlayBar: true,
-      lyric: "",
-      rollingDistance: "",
-    };
+      lyric: '',
+      rollingDistance: '',
+      isRandom: false,
+    }
   },
   computed: {
     playImgUrl() {
       // let url = this.currentMusic.picUrl || this.currentMusic.al.picUrl;
       // console.log(url);
-      return this.currentMusic.picUrl || this.currentMusic.al.picUrl;
+      return this.currentMusic.picUrl || this.currentMusic.al.picUrl
     },
     playInfo() {
       // let info = this.currentMusic.ar || this.currentMusic.song.artists;
-      return this.currentMusic.ar || this.currentMusic.song.artists;
+      return this.currentMusic.ar || this.currentMusic.song.artists
     },
   },
 
   watch: {
     paused(newVal) {
-      this.$emit("update:paused", newVal);
+      this.$emit('update:paused', newVal)
     },
     // currentMusic: {
     //   deep: true,
@@ -142,58 +145,59 @@ export default {
     // },
   },
   mounted() {
-    let audio = this.$refs.audio;
-    audio.addEventListener("pause", () => {
-      console.log("暂停");
-      this.paused = true;
-    });
-    audio.addEventListener("play", () => {
-      console.log("播放");
-      this.paused = false;
-    });
-    audio.addEventListener("durationchange", () => {
-      this.lyric = "";
-      this.getLyric();
-      this.duration = audio.duration;
-    });
-    audio.addEventListener("timeupdate", () => {
-      this.currentTime = audio.currentTime;
-      this.drawCircle(this.currentTime, this.duration);
-      this.lyrics_scroll(this.currentTime);
-    });
-    audio.addEventListener("ended", () => {
-      this.toggleSong(true);
-    });
+    let audio = this.$refs.audio
+    audio.addEventListener('pause', () => {
+      // console.log("暂停");
+      this.paused = true
+    })
+    audio.addEventListener('play', () => {
+      // console.log("播放");
+      this.paused = false
+      this.shuffle_playback()
+    })
+    audio.addEventListener('durationchange', () => {
+      this.lyric = ''
+      this.getLyric()
+      this.duration = audio.duration
+    })
+    audio.addEventListener('timeupdate', () => {
+      this.currentTime = audio.currentTime
+      this.drawCircle(this.currentTime, this.duration)
+      this.lyrics_scroll(this.currentTime)
+    })
+    audio.addEventListener('ended', () => {
+      this.toggleSong(false)
+    })
   },
   methods: {
     onclickPlayBar() {
-      this.$emit("onclickPlayBar");
-      this.isShowPlayBar = false;
+      // this.$emit('onclickPlayBar')
+      this.isShowPlayBar = false
     },
     togglePaused() {
-      const music = this.$refs.audio;
+      const music = this.$refs.audio
       if (music.paused) {
-        music.play();
+        music.play()
       } else {
-        music.pause();
+        music.pause()
       }
       // this.paused = !this.paused;
     },
     //绘制圆形方法
     drawCircle(n, t) {
-      let canvas = this.$refs.circle;
-      let context = canvas.getContext("2d");
-      context.clearRect(0, 0, 50, 50);
-      context.beginPath();
-      context.strokeStyle = "#636363";
-      context.lineWidth = 2.5; //设置线条宽度
-      context.arc(25, 25, 20, 0, Math.PI * 2, false);
-      context.stroke();
-      context.closePath();
+      let canvas = this.$refs.circle
+      let context = canvas.getContext('2d')
+      context.clearRect(0, 0, 50, 50)
+      context.beginPath()
+      context.strokeStyle = '#636363'
+      context.lineWidth = 2.5 //设置线条宽度
+      context.arc(25, 25, 20, 0, Math.PI * 2, false)
+      context.stroke()
+      context.closePath()
 
-      context.beginPath();
-      context.strokeStyle = "skyblue";
-      context.lineWidth = 2.5;
+      context.beginPath()
+      context.strokeStyle = 'skyblue'
+      context.lineWidth = 2.5
       context.arc(
         25,
         25,
@@ -201,39 +205,54 @@ export default {
         Math.PI * -0.5,
         Math.PI * ((n / t) * 2 - 0.5),
         false
-      );
-      context.stroke();
-      context.closePath();
+      )
+      context.stroke()
+      context.closePath()
     },
 
+    shuffle_playback() {
+      let i = Math.floor(Math.random() * this.PlayList.length)
+      return i
+    },
     calculateNext() {
-      let NextIndex;
-      if (this.currentIndex < this.PlayList.length - 1) {
-        NextIndex = this.currentIndex + 1;
-      } else {
-        NextIndex = 0;
-      }
-      return NextIndex;
+      // console.log('执行calculateNext-下一曲')
+      // let NextIndex
+      // if (this.currentIndex < this.PlayList.length - 1) {
+      //   NextIndex = this.currentIndex + 1
+      // } else {
+      //   NextIndex = 0
+      // }
+      let NextIndex = (this.currentIndex + 1) % this.PlayList.length
+      return NextIndex
     },
     calculatePrevious() {
-      let NextIndex;
-      NextIndex = this.currentIndex - 1;
-      if (this.currentIndex <= 0) {
-        NextIndex = this.PlayList.length - 1;
-      }
-      return NextIndex;
+      // console.log('执行calculatePrevious-上一曲')
+      // let NextIndex
+      // NextIndex = this.currentIndex - 1
+      // if (this.currentIndex <= 0) {
+      //   NextIndex = this.PlayList.length - 1
+      // }
+      let NextIndex =
+        (this.currentIndex + (this.PlayList.length - 1)) % this.PlayList.length
+      return NextIndex
     },
     toggleSong(PorN) {
-      let index;
-      if (PorN) {
-        index = this.calculateNext();
+      let index
+      if (this.isRandom) {
+        if (JSON.parse(PorN)) {
+          index = this.calculatePrevious()
+          console.log('pre')
+        } else {
+          index = this.calculateNext()
+          console.log('next')
+        }
       } else {
-        index = this.calculatePrevious();
+        index = Math.floor(Math.random() * this.PlayList.length)
       }
-      this.$emit("update:music", {
+      this.$emit('update:music', {
         item: this.PlayList[index],
         index,
-      });
+      })
     },
 
     // PlayNextSong() {
@@ -254,44 +273,45 @@ export default {
 
     getLyric() {
       // console.log(this.currentMusic.name, this.currentMusic.id);
+
       this.axios({
-        url: "/lyric",
-        method: "get",
+        url: '/lyric',
+        method: 'get',
         params: {
           id: this.currentMusic.id,
         },
       }).then((res) => {
-        console.log("获取成功");
+        // console.log("获取成功");
         // console.log(res);
-        let lyric = res.data.lrc.lyric;
-        let regular_verification = /\[\d{2}:\d{2}\.\d{2,3}\]/gi;
+        let lyric = res.data.lrc.lyric
+        let regular_verification = /\[\d{2}:\d{2}\.\d{2,3}\]/gi
         this.lyric = lyric
-          .split("\n")
-          .filter((e) => e)
-          .map((item, index) => {
-            let time = item
-              .match(regular_verification)[0]
-              .replace(/(\[|\])/gi, "");
-            let timeList = time.split(":");
-            time = Number(timeList[0]) * 60 + Number(timeList[1]);
-            let text = item.replace(regular_verification, "");
-            return { time, text, index };
-          });
+        .split('\n')
+        .filter((e) => e)
+        .map((item, index) => {
+          let time = item
+          .match(regular_verification)[0]
+          .replace(/(\[|\])/gi, '')
+          let timeList = time.split(':')
+          time = Number(timeList[0]) * 60 + Number(timeList[1])
+          let text = item.replace(regular_verification, '')
+          return { time, text, index }
+        })
         // console.log(l_arr)
         // this.lyric = l_arr;
         // console.log(this.lyric);
-      });
+      })
     },
     lyrics_scroll(v) {
       if (this.lyric) {
         this.rollingDistance = this.lyric.findIndex((item) => {
-          return item.time > v;
-        });
+          return item.time > v
+        })
         // this.rollingDistance = i;
       }
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>

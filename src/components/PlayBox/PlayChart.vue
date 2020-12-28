@@ -12,9 +12,9 @@
 export default {
   name: "PlayChart",
   props: ["currentMusic", "paused"],
-  created() {
-    console.log(this.currentMusic);
-  },
+  // created() {
+  //   console.log(this.currentMusic);
+  // },
 };
 </script>
 

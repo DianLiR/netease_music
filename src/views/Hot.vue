@@ -48,6 +48,8 @@ export default {
       // if (localStorage.getItem("playInfo")) {
       //   this.playInfo = JSON.parse(localStorage.getItem("playInfo"));
       // } else {
+      this.$loading()
+
       this.axios({
         method: "post",
         url: "http://music.kele8.cn/playlist/detail",
@@ -73,6 +75,7 @@ export default {
               ids: res,
             },
           }).then((res) => {
+            this.$loading.close()
             this.playlist = res.data.songs;
             console.log(this.playlist);
           });

@@ -1,18 +1,19 @@
 <template>
   <div class="PlaylistHeader">
+    <i v-if="$route.name == 'PlayList'" class="iconfont icon-chexiao_huaban back" @click="$router.back()"></i>
     <div
       :style="{ backgroundImage: `url('${info.coverImgUrl}')` }"
       class="mask"
     ></div>
     <div class="content">
       <div class="img_box">
-        <img :src="info.coverImgUrl" alt=""/>
-        <span>{{ info.playCount |format_quantity }}</span>
+        <img :src="info.coverImgUrl" alt="" />
+        <span>{{ info.playCount | format_quantity }}</span>
       </div>
       <div class="info_text">
         <span>{{ info.name }}</span>
-        <span class="creator" v-if="gain_success">
-          <img  :src="info.creator.avatarUrl" alt=""/>
+        <span v-if="info.creator" class="creator">
+          <img :src="info.creator.avatarUrl" alt="" />
           {{ info.creator.nickname }}
         </span>
       </div>
@@ -22,18 +23,18 @@
 
 <script>
 export default {
-  name: 'PlaylistHeader',
-  props: ['info', 'gain_success'],
+  name: "PlaylistHeader",
+  props: ["info", "gain_success"],
   beforeRouteUpdate(to, from, next) {
-    console.log(to,from)
+    console.log(to, from);
 
-    next()
+    next();
     // 在当前路由改变，但是该组件被复用时调用
     // 举例来说，对于一个带有动态参数的路径 /foo/:id，在 /foo/1 和 /foo/2 之间跳转的时候，
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
     // 可以访问组件实例 `this`
   },
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -41,6 +42,13 @@ export default {
   position: relative;
   overflow: hidden;
   min-height: 170px;
+
+  .back {
+    position: absolute;
+    left: 15px;
+    font-size: 20px;
+    text-shadow: 1px 1px 0px #fff
+  }
 
   .mask {
     position: absolute;

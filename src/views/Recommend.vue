@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import RecommendSonglist from "../components/RecommendSonglist.vue";
-import LatestMusic from "../components/LatestMusic.vue";
+import RecommendSonglist from '../components/RecommendSonglist.vue'
+import LatestMusic from '../components/LatestMusic.vue'
 
 export default {
-  name: "Recommend",
+  name: 'Recommend',
   components: {
     RecommendSonglist,
     LatestMusic,
@@ -31,22 +31,24 @@ export default {
       NewSong: [],
       recIndex: 0,
       count: 0,
-    };
+    }
   },
   created() {
-    this.axios.get("/personalized?limit=12").then((res) => {
-      this.recommends = res.data.result;
-    });
-    this.axios.get("/personalized/newsong").then((res) => {
-      this.NewSong = res.data.result;
-    });
+    this.$loading()
+    this.axios.get('/personalized?limit=12').then((res) => {
+      this.$loading.close()
+      this.recommends = res.data.result
+    })
+    this.axios.get('/personalized/newsong').then((res) => {
+      this.NewSong = res.data.result
+    })
   },
   computed: {
     // currentRecommends() {
     // return this.recommends.slice(0, 12);
     // },
   },
-};
+}
 </script>
 
 <style lang="less" scoped></style>

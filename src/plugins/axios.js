@@ -10,8 +10,8 @@ import axios from "axios";
 
 let config = {
   // 配置请求的基准URL地址
-  baseURL: "http://keuaile75.top:3000",
-  // baseURL: "http://music.kele8.cn",
+  // baseURL: "http://music.keuaile75.top/",
+  baseURL: "http://music.kele8.cn",
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control

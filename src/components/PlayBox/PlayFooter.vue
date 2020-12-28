@@ -20,7 +20,11 @@
       <span class="duration">{{ duration | FormatTime }}</span>
     </div>
     <div class="play_control">
-      <span class="iconfont icon-hanhan-01-011"></span>
+      <span
+        :class="isRandom ? 'icon-hanhan-01-011' : 'icon-hanhan-01-012'"
+        class="iconfont"
+        @click="$emit('update:isRandom')"
+      ></span>
       <span
         class="iconfont icon-shangyishou_huaban"
         @click="$emit('toggleSong', 'true')"
@@ -41,57 +45,57 @@
 
 <script>
 export default {
-  name: "PlayFooter",
-  props: ["currentTime", "duration", "paused"],
+  name: 'PlayFooter',
+  props: ['currentTime', 'duration', 'paused', 'isRandom'],
   methods: {
     get_value(e) {
-      this.$emit("update:currentTime", e.target.value);
+      this.$emit('update:currentTime', e.target.value)
     },
     togglePlay() {
-      this.$emit("toggle_play");
+      this.$emit('toggle_play')
     },
   },
   filters: {
     FormatTime(v) {
-      let h = Math.floor(v / 3600);
-      let m = Math.floor((v / 60) % 60);
-      let s = Math.floor(v % 60);
-      h = h <= 0 ? "" : h < 10 ? "0" + h + ":" : h + ":";
-      m = m < 10 ? "0" + m + ":" : m + ":";
-      s = s < 10 ? "0" + s : s;
-      return h + m + s;
+      let h = Math.floor(v / 3600)
+      let m = Math.floor((v / 60) % 60)
+      let s = Math.floor(v % 60)
+      h = h <= 0 ? '' : h < 10 ? '0' + h + ':' : h + ':'
+      m = m < 10 ? '0' + m + ':' : m + ':'
+      s = s < 10 ? '0' + s : s
+      return h + m + s
     },
   },
   data: function () {
     return {
       icon_s: [
         {
-          info: "order",
-          icon: "icon-hanhan-01-011",
+          info: 'order',
+          icon: 'icon-hanhan-01-011',
           fn: function () {
-            console.log("aaa");
+            console.log('aaa')
           },
         },
         {
-          info: "previous_song",
-          icon: "icon-shangyishou_huaban",
+          info: 'previous_song',
+          icon: 'icon-shangyishou_huaban',
         },
         {
-          info: "status",
-          icon: "icon-bofang_huaban1",
+          info: 'status',
+          icon: 'icon-bofang_huaban1',
         },
         {
-          info: "next_song",
-          icon: "icon-xiayishou_huaban",
+          info: 'next_song',
+          icon: 'icon-xiayishou_huaban',
         },
         {
-          info: "list",
-          icon: "icon-wenzhang_huaban",
+          info: 'list',
+          icon: 'icon-wenzhang_huaban',
         },
       ],
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="less" scoped>

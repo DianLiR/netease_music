@@ -13,7 +13,7 @@
           :key="item.index"
           :class="[index == rollingDistance - 1 ? 'active' : '']"
         >
-          {{ item.text||'-----------' }}
+          {{ item.text || '-----------' }}
         </li>
       </ul>
     </div>
@@ -22,8 +22,8 @@
 
 <script>
 export default {
-  name: "PlayLyric",
-  props: ["lyric", "rollingDistance"],
+  name: 'PlayLyric',
+  props: ['lyric', 'rollingDistance'],
   // props: ["lyric", "currentTime"],
   data() {
     return {
@@ -31,55 +31,62 @@ export default {
       touching: false, //是否在触摸
       sliding_distance: 0, //滑动距离
       current_distances: Number,
-    };
+      startTime: '',
+      endTime: '',
+    }
   },
   computed: {
     current_distance() {
-      let top_distance = 0;
+      let top_distance = 0
 
-      if (this.rollingDistance == -1) return;
+      if (this.rollingDistance == -1) return
       // this.rollingDistance = i;
       if (this.$refs.lyric) {
-        let h = this.$refs.lyric.offsetHeight / 2;
-        console.dir(h);
-        top_distance = -30 * (this.rollingDistance - 1) + h;
+        let h = this.$refs.lyric.offsetHeight / 2
+        // console.dir(h)
+        top_distance = -30 * (this.rollingDistance - 1) + h
       }
-      return top_distance;
+      return top_distance
     },
   },
   watch: {
-    sliding_distance (newValue) {
-      const ul = this.$refs.ul;
-      if (this.rollingDistance == -1) return;
+    sliding_distance(newValue) {
+      const ul = this.$refs.ul
+      if (this.rollingDistance == -1) return
       if (this.$refs.lyric) {
-        let h = this.$refs.lyric.offsetHeight / 2;
-        console.dir(h);
-        ul.style.top = -30 * (this.rollingDistance + newValue) + h + "px";
+        let h = this.$refs.lyric.offsetHeight / 2
+        console.dir(h)
+        ul.style.top = -30 * (this.rollingDistance + newValue) + h + 'px'
       }
     },
   },
   methods: {
     touchstart(e) {
-      this.touching = true;
-      this.slide_y = e.touches[0].clientY;
+      this.touching = true
+      this.slide_y = e.touches[0].clientY
+      this.startTime = new Date().getTime()
     },
     touchmove(e) {
-      this.sliding_distance = Math.floor(
-        (this.slide_y - e.touches[0].clientY) / 30
-      );
-      // console.log(this.slide_y)
+      if (this.touching) {
+        this.sliding_distance = Math.floor(
+          (this.slide_y - e.touches[0].clientY) / 30
+        )
+      }
     },
     touchend() {
-      this.touching = false;
-      // console.log(this.rollingDistance, this.slide_y, this.sliding_distance)
-      let point_in_time = this.lyric[
+      this.endTime = new Date().getTime()
+      let times = this.endTime - this.startTime
+      if (times > 120) {
+        this.touching = false
+        // console.log(this.rollingDistance, this.slide_y, this.sliding_distance)
+        let point_in_time = this.lyric[
         this.rollingDistance + this.sliding_distance
-      ].time;
-      // console.log(point_in_time)
-      this.$emit("update:currentTime", point_in_time);
+          ].time
+        this.$emit('update:currentTime', point_in_time)
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -92,7 +99,6 @@ export default {
     height: 100%;
     width: 80%;
     margin: 0 auto;
-
 
     ul {
       width: 100%;
